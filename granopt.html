@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Granopt — Оптовий продаж граніту</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --stone-dark: #2a2a2a;
+            --stone-medium: #4a4a4a;
+            --stone-light: #e8e8e8;
+            --stone-accent: #8b7355;
+            --granite-grey: #6b6b6b;
+            --warm-white: #faf8f5;
+            --deep-black: #1a1a1a;
+            --gold-accent: #c9a961;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--warm-white);
+            color: var(--stone-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(42, 42, 42, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--deep-black);
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            color: var(--stone-medium);
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--stone-accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--stone-dark);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%232a2a2a;stop-opacity:0.3"/><stop offset="100%" style="stop-color:%234a4a4a;stop-opacity:0.1"/></linearGradient></defs><polygon points="0,0 600,0 0,400" fill="url(%23g1)"/><polygon points="1200,800 600,800 1200,400" fill="url(%23g1)"/></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 900px;
+            padding: 0 2rem;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5.5rem;
+            font-weight: 300;
+            color: var(--warm-white);
+            letter-spacing: 4px;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .hero h1 strong {
+            font-weight: 700;
+            display: block;
+            color: var(--gold-accent);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--stone-light);
+            margin-bottom: 3rem;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--gold-accent);
+            color: var(--deep-black);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            transition: all 0.4s ease;
+            border: 2px solid var(--gold-accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--warm-white);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        .btn-primary:hover {
+            color: var(--deep-black);
+        }
+
+        section {
+            padding: 8rem 5%;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            color: var(--deep-black);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--granite-grey);
+            margin-bottom: 5rem;
+            font-size: 1.1rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--stone-dark);
+            font-weight: 600;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--granite-grey);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border: 1px solid rgba(42, 42, 42, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gold-accent);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--granite-grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about-image {
+            height: 600px;
+            background: linear-gradient(45deg, #3a3a3a 0%, #5a5a5a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="%236b6b6b" opacity="0.3"/><circle cx="200" cy="200" r="150" fill="none" stroke="%23c9a961" stroke-width="2" opacity="0.5"/><circle cx="200" cy="200" r="100" fill="none" stroke="%23c9a961" stroke-width="1" opacity="0.3"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: rotate 40s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .products {
+            background: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: var(--warm-white);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(42, 42, 42, 0.1);
+            position: relative;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gold-accent);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 280px;
+            background: linear-gradient(135deg, #3a3a3a 0%, #5a5a5a 50%, #4a4a4a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="30" fill="none" stroke="%23c9a961" stroke-width="0.5" opacity="0.2"/></svg>');
+            background-size: 80px 80px;
+        }
+
+        .product-content {
+            padding: 2rem;
+        }
+
+        .product-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--stone-dark);
+            font-weight: 600;
+        }
+
+        .product-content p {
+            color: var(--granite-grey);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-features li {
+            padding: 0.5rem 0;
+            color: var(--granite-grey);
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(42, 42, 42, 0.05);
+        }
+
+        .product-features li:last-child {
+            border-bottom: none;
+        }
+
+        .product-features li::before {
+            content: '◆';
+            color: var(--gold-accent);
+            margin-right: 0.8rem;
+            font-size: 0.7rem;
+        }
+
+        .advantages {
+            background: var(--deep-black);
+            color: var(--stone-light);
+        }
+
+        .advantages .section-title {
+            color: var(--warm-white);
+        }
+
+        .advantages .section-subtitle {
+            color: var(--stone-light);
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .advantage-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .advantage-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .advantage-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border: 2px solid var(--gold-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--gold-accent);
+            font-weight: 600;
+        }
+
+        .advantage-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--gold-accent);
+            font-weight: 600;
+        }
+
+        .advantage-card p {
+            color: var(--stone-light);
+            line-height: 1.7;
+        }
+
+        .contact {
+            background: var(--warm-white);
+        }
+
+        .contact-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+        }
+
+        .contact-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--stone-dark);
+        }
+
+        .contact-item {
+            margin-bottom: 2rem;
+        }
+
+        .contact-item h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--granite-grey);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .contact-item p {
+            font-size: 1.2rem;
+            color: var(--stone-dark);
+            font-weight: 400;
+        }
+
+        .contact-item a {
+            color: var(--stone-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: var(--gold-accent);
+        }
+
+        .contact-form {
+            background: white;
+            padding: 3rem;
+            border: 1px solid rgba(42, 42, 42, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--granite-grey);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(42, 42, 42, 0.2);
+            background: var(--warm-white);
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--stone-dark);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--deep-black);
+            color: var(--warm-white);
+            border: none;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--gold-accent);
+            color: var(--deep-black);
+        }
+
+        footer {
+            background: var(--deep-black);
+            color: var(--stone-light);
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            color: var(--gold-accent);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .about-grid,
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 5rem 5%;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain-overlay"></div>
+
+    <header>
+        <div class="logo">Granopt</div>
+        <nav>
+            <a href="#about">Про нас</a>
+            <a href="#products">Продукція</a>
+            <a href="#advantages">Переваги</a>
+            <a href="#contact">Контакти</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Оптовий продаж <strong>граніту</strong></h1>
+            <p>Преміальна якість каменю для масштабних проектів</p>
+            <a href="#contact" class="btn-primary">Отримати консультацію</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="about-grid">
+            <div class="about-text">
+                <h3>Granopt — Ваш надійний партнер у світі граніту</h3>
+                <p>Ми спеціалізуємось на оптовому постачанні граніту найвищої якості для будівництва, архітектури та ландшафтного дизайну. Наш досвід та професіоналізм забезпечують індивідуальний підхід до кожного клієнта.</p>
+                <p>Працюємо з найкращими кар'єрами України та світу, гарантуючи автентичність, екологічність та довговічність кожного каменю.</p>
+                
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">25+</span>
+                        <span class="stat-label">Років досвіду</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Проектів</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Задоволених клієнтів</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image"></div>
+        </div>
+    </section>
+
+    <section id="products" class="products">
+        <h2 class="section-title">Наша продукція</h2>
+        <p class="section-subtitle">Широкий асортимент гранітних виробів для будь-яких потреб</p>
+        
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">пам'ятники 1</div>
+                <div class="product-content">
+                    <h3>назва</h3>
+                    <p>опис</p>
+                    <ul class="product-features">
+                        <li>розміри</li>
+                        <li>матеріал</li>
+                        <li>додаткові послуги</li>
+                        <li>ціна/мініальне замовлення/тд</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">пам'ятники 2</div>
+                <div class="product-content">
+                    <h3>назва</h3>
+                    <p>опис</p>
+                    <ul class="product-features">
+                        <li>розміри</li>
+                        <li>матеріал</li>
+                        <li>додаткові послуги</li>
+                        <li>ціна/мініальне замовлення/тд</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">пам'ятники 3</div>
+                <div class="product-content">
+                    <h3>назва</h3>
+                    <p>опис</p>
+                    <ul class="product-features">
+                        <li>розміри</li>
+                        <li>матеріал</li>
+                        <li>додаткові послуги</li>
+                        <li>ціна/мініальне замовлення/тд</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">пам'ятники 4</div>
+                <div class="product-content">
+                    <h3>назва</h3>
+                    <p>опис</p>
+                    <ul class="product-features">
+                        <li>розміри</li>
+                        <li>матеріал</li>
+                        <li>додаткові послуги</li>
+                        <li>ціна/мініальне замовлення/тд</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">пам'ятники 5</div>
+                <div class="product-content">
+                    <h3>назва</h3>
+                    <p>опис</p>
+                    <ul class="product-features">
+                        <li>розміри</li>
+                        <li>матеріал</li>
+                        <li>додаткові послуги</li>
+                        <li>ціна/мініальне замовлення/тд</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">Пам'ятники 6</div>
+                <div class="product-content">
+                    <h3>назва</h3>
+                    <p>опис</p>
+                    <ul class="product-features">
+                        <li>розміри</li>
+                        <li>матеріал</li>
+                        <li>додаткові послуги</li>
+                        <li>ціна/мініальне замовлення/тд</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="advantages" class="advantages">
+        <h2 class="section-title">Чому обирають нас</h2>
+        <p class="section-subtitle">Переваги співпраці з Granopt</p>
+        
+        <div class="advantages-grid">
+            <div class="advantage-card">
+                <div class="advantage-icon">01</div>
+                <h3>Прямі поставки</h3>
+                <p>Працюємо безпосередньо з кар'єрами, що дозволяє пропонувати найкращі ціни без посередників.</p>
+            </div>
+
+            <div class="advantage-card">
+                <div class="advantage-icon">02</div>
+                <h3>Контроль якості</h3>
+                <p>Кожна партія проходить багаторівневу перевірку на відповідність стандартам якості.</p>
+            </div>
+
+            <div class="advantage-card">
+                <div class="advantage-icon">03</div>
+                <h3>Логістика</h3>
+                <p>Організовуємо доставку по всій Україні власним та партнерським транспортом у зручний час.</p>
+            </div>
+
+            <div class="advantage-card">
+                <div class="advantage-icon">04</div>
+                <h3>Гнучкі умови</h3>
+                <p>Індивідуальні умови співпраці, знижки для постійних клієнтів, можливість відстрочки платежу.</p>
+            </div>
+
+            <div class="advantage-card">
+                <div class="advantage-icon">05</div>
+                <h3>Експертна підтримка</h3>
+                <p>Наші фахівці допоможуть підібрати оптимальний матеріал для вашого проекту та розрахують кількість.</p>
+            </div>
+
+            <div class="advantage-card">
+                <div class="advantage-icon">06</div>
+                <h3>Документація</h3>
+                <p>Повний пакет супровідних документів, сертифікати якості та паспорти на продукцію.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2 class="section-title">Зв'яжіться з нами</h2>
+        <p class="section-subtitle">Готові відповісти на всі ваші питання та розрахувати вартість замовлення</p>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Контактна інформація</h3>
+                
+                <div class="contact-item">
+                    <h4>Телефон</h4>
+                    <p><a href="tel:+380675880957">+38 (067) 588-09-57 (Юрій)</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>Email</h4>
+                    <p><a href="mailto:infogranopt@gmail.com">infogranopt@gmail.com</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>Адреса офісу</h4>
+                    <p>с. Козіївка, Вул. 50 років жовтня, 64</p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>Графік роботи</h4>
+                    <p>Пн-Пт: 9:00 - 18:00<br></p>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Ім'я *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Компанія</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Телефон *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Повідомлення</label>
+                        <textarea id="message" name="message"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Відправити заявку</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">GRANOPT</div>
+        <p>&copy; 2025 Granopt. Всі права захищені. Оптовий продаж граніту.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(250, 248, 245, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(250, 248, 245, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Form submission (placeholder)
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Дякуємо за вашу заявку! Ми зв\'яжемося з вами найближчим часом.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

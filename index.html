@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Granopt — Оптовий продаж граніту</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --stone-dark: #2a2a2a;
+            --stone-medium: #4a4a4a;
+            --stone-light: #e8e8e8;
+            --stone-accent: #8b7355;
+            --granite-grey: #6b6b6b;
+            --warm-white: #faf8f5;
+            --deep-black: #1a1a1a;
+            --gold-accent: #c9a961;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--warm-white);
+            color: var(--stone-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(42, 42, 42, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--deep-black);
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            color: var(--stone-medium);
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--stone-accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--stone-dark);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%232a2a2a;stop-opacity:0.3"/><stop offset="100%" style="stop-color:%234a4a4a;stop-opacity:0.1"/></linearGradient></defs><polygon points="0,0 600,0 0,400" fill="url(%23g1)"/><polygon points="1200,800 600,800 1200,400" fill="url(%23g1)"/></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 900px;
+            padding: 0 2rem;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5.5rem;
+            font-weight: 300;
+            color: var(--warm-white);
+            letter-spacing: 4px;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .hero h1 strong {
+            font-weight: 700;
+            display: block;
+            color: var(--gold-accent);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--stone-light);
+            margin-bottom: 3rem;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--gold-accent);
+            color: var(--deep-black);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            transition: all 0.4s ease;
+            border: 2px solid var(--gold-accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--warm-white);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        .btn-primary:hover {
+            color: var(--deep-black);
+        }
+
+        section {
+            padding: 8rem 5%;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            color: var(--deep-black);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--granite-grey);
+            margin-bottom: 5rem;
+            font-size: 1.1rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--deep-black);
+            letter-spacing: 1px;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--stone-medium);
+            font-size: 1.05rem;
+        }
+
+        .about-image {
+            height: 500px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circles-animation {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .circle {
+            position: absolute;
+            border: 2px solid var(--gold-accent);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .circle:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            animation-delay: 0s;
+        }
+
+        .circle:nth-child(2) {
+            width: 180px;
+            height: 180px;
+            animation-delay: 0.8s;
+        }
+
+        .circle:nth-child(3) {
+            width: 260px;
+            height: 260px;
+            animation-delay: 1.6s;
+        }
+
+        .rotating-square {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 2px solid var(--gold-accent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation: rotateSquare 8s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+
+        @keyframes rotateSquare {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--stone-light);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gold-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--granite-grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .products {
+            background: var(--stone-light);
+        }
+
+        .product-section {
+            max-width: 1400px;
+            margin: 0 auto 6rem;
+        }
+
+        .product-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .product-section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--deep-black);
+            letter-spacing: 1px;
+        }
+
+        /* Варіанти прямих пам'ятників */
+        .straight-monuments {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .monument-visual {
+            background: white;
+            padding: 3rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .monument-3d-image {
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .monument-3d-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .monument-3d-image svg {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .monuments-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .monument-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .monument-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .monument-label {
+            margin-bottom: 1rem;
+            color: var(--deep-black);
+        }
+
+        .monument-card p {
+            font-size: 0.95rem;
+            color: var(--stone-medium);
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .monument-price {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--deep-black);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--deep-black);
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .monument-btn {
+            display: block;
+            margin-top: 1.5rem;
+            padding: 0.9rem 2rem;
+            background: var(--gold-accent);
+            color: var(--deep-black);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--gold-accent);
+            text-align: center;
+        }
+
+        .monument-btn:hover {
+            background: transparent;
+            color: var(--gold-accent);
+        }
+
+        /* Примери різних робіт */
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .example-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .example-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .example-image {
+            width: 100%;
+            max-width: 180px;
+        }
+
+        .example-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2));
+        }
+
+        .example-image svg {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2));
+        }
+
+        /* Гранітне огородження */
+        .fence-section {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .fence-visual {
+            background: white;
+            padding: 3rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .fence-image {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        .fence-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .fence-image svg {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .fence-info {
+            background: white;
+            padding: 3rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .fence-details p {
+            font-size: 1rem;
+            color: var(--stone-medium);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .fence-details strong {
+            color: var(--deep-black);
+            font-weight: 600;
+        }
+
+        .fence-note {
+            font-style: italic;
+            color: var(--granite-grey);
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--stone-light);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 2px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 250px;
+            background: linear-gradient(135deg, var(--stone-medium), var(--granite-grey));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .product-content {
+            padding: 2rem;
+        }
+
+        .product-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--deep-black);
+        }
+
+        .product-content p {
+            color: var(--granite-grey);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .product-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-features li {
+            padding: 0.5rem 0;
+            color: var(--stone-medium);
+            border-bottom: 1px solid var(--stone-light);
+            font-size: 0.95rem;
+        }
+
+        .product-features li:last-child {
+            border-bottom: none;
+        }
+
+        .product-features li::before {
+            content: '▸';
+            color: var(--gold-accent);
+            font-weight: bold;
+            margin-right: 0.8rem;
+        }
+
+        .contact {
+            background: var(--warm-white);
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--deep-black);
+        }
+
+        .contact-item {
+            margin-bottom: 2rem;
+        }
+
+        .contact-item h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--granite-grey);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .contact-item p {
+            font-size: 1.1rem;
+            color: var(--stone-dark);
+        }
+
+        .contact-item a {
+            color: var(--stone-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: var(--gold-accent);
+        }
+
+        /* FOOTER STYLES */
+        footer {
+            background: var(--deep-black);
+            color: var(--stone-light);
+            padding: 2rem 5%;
+        }
+
+        .footer-simple {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-simple p {
+            color: var(--granite-grey);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 1024px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .straight-monuments {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .monuments-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .fence-section {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .examples-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 5rem 5%;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .monuments-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .examples-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-section-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain-overlay"></div>
+
+    <header>
+        <div class="logo">Granopt</div>
+        <nav>
+            <a href="#about">Про нас</a>
+            <a href="#products">Продукція</a>
+            <a href="#contact">Контакти</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Оптовий продаж <strong>граніту</strong></h1>
+            <p>Преміальна якість каменю для масштабних проектів</p>
+            <a href="#contact" class="btn-primary">Отримати консультацію</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="about-grid">
+            <div class="about-text">
+                <h3>Granopt — Ваш надійний партнер у світі граніту</h3>
+                <p>Ми спеціалізуємось на оптовому постачанні граніту найвищої якості для будівництва, архітектури та ландшафтного дизайну. Наш досвід та професіоналізм забезпечують індивідуальний підхід до кожного клієнта.</p>
+                <p>Працюємо з найкращими кар'єрами України та світу, гарантуючи автентичність, екологічність та довговічність кожного каменю.</p>
+                
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">25+</span>
+                        <span class="stat-label">Років досвіду</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Проектів</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Задоволених клієнтів</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <div class="circles-animation">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="rotating-square"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="products">
+        <h2 class="section-title">Наша продукція</h2>
+        
+        <!-- Варіанти прямих пам'ятників -->
+        <div class="product-section">
+            <h3 class="product-section-title">Варіанти прямих пам'ятників</h3>
+            
+            <div class="straight-monuments">
+                <div class="monument-visual">
+                    <div class="monument-3d-image">
+                        <img src="monument1.png" alt="Прямий пам'ятник з квітником">
+                    </div>
+                </div>
+
+                <div class="monuments-grid">
+                    <div class="monument-card">
+                        <p class="monument-label"><strong>Комплект:</strong></p>
+                        <p>Арка: 80x50x8см</p>
+                        <p>Тумба: 50x20x15см</p>
+                        <p>Цвітник: 100x30x8см</p>
+                        <p>Художественне оформлення.</p>
+                        <p>Портрет, 9x10 в дзерк.</p>
+                        <a href="#contact" class="monument-btn">Замовити консультацію</a>
+                    </div>
+
+                    <div class="monument-card">
+                        <p class="monument-label"><strong>Комплект:</strong></p>
+                        <p>Арка: 100x50x8см</p>
+                        <p>Тумба: 60x20x15см</p>
+                        <p>Цвітник: 100x30x8см</p>
+                        <p>Художественне оформлення.</p>
+                        <p>Портрет, 9x10 в дзерк.</p>
+                        <a href="#contact" class="monument-btn">Замовити консультацію</a>
+                    </div>
+
+                    <div class="monument-card">
+                        <p class="monument-label"><strong>Комплект:</strong></p>
+                        <p>Арка: 120x60x8см</p>
+                        <p>Тумба: 70x20x15см</p>
+                        <p>Цвітник: 120x30x8см</p>
+                        <p>Художественне оформлення.</p>
+                        <p>Портрет, 9x10 в дзерк.</p>
+                        <a href="#contact" class="monument-btn">Замовити консультацію</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Примери різних робіт -->
+        <div class="product-section">
+            <h3 class="product-section-title">Примери різних робіт</h3>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="example1.png" alt="Пам'ятник з округлим верхом">
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="example2.png" alt="Пам'ятник з хвилястим верхом">
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="example3.png" alt="Пам'ятник з подвійним округленням">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Гранітне огородження -->
+        <div class="product-section">
+            <h3 class="product-section-title">Гранітне огородження</h3>
+            
+            <div class="fence-section">
+                <div class="fence-visual">
+                    <div class="fence-image">
+                        <img src="fence.png" alt="Гранітне огородження">
+                    </div>
+                </div>
+
+                <div class="fence-info">
+                    <div class="fence-details">
+                        <p><strong>Розмір:</strong> 220x220 см.</p>
+                        <p><strong>Ширина:</strong> 8+2x8x8 см, 7 шт.</p>
+                        <p><strong>Стовпчик:</strong> 80x8x8 8 см.</p>
+                        <p class="fence-note">Підставова із запросом (Чотира огіток, стовпчики).</p>
+                        <a href="#contact" class="monument-btn">Замовити консультацію</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2 class="section-title">Зв'яжіться з нами</h2>
+        <p class="section-subtitle">Готові відповісти на всі ваші питання та розрахувати вартість замовлення</p>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Контактна інформація</h3>
+                
+                <div class="contact-item">
+                    <h4>Телефон</h4>
+                    <p><a href="tel:+380675880957">+38 (067) 588-09-57 (Юрій)</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>Email</h4>
+                    <p><a href="mailto:infogranopt@gmail.com">infogranopt@gmail.com</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>Адреса офісу</h4>
+                    <p>с. Козіївка, Вул. 50 років жовтня, 64</p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>Графік роботи</h4>
+                    <p>Пн-Пт: 9:00 - 18:00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-simple">
+            <p>&copy; 2025 Granopt. Всі права захищені. Оптовий продаж граніту.</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (wind
